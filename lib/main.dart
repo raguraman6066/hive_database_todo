@@ -3,6 +3,7 @@ import 'package:hive_database/todo_home.dart';
 import 'package:hive_database/todo_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import 'color_schemes.g.dart';
 import 'home_screen.dart';
 
 void main() async {
@@ -14,21 +15,37 @@ void main() async {
   await Hive.openBox<Todo>('todo');
   //other hive box
   await Hive.openBox('demo');
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _currentThemeMode = ThemeMode.light;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      home: TodoHome(
+        toggleTheme: _toggleTheme,
       ),
-      home: TodoHome(),
+      themeMode: _currentThemeMode,
     );
+  }
+
+  void _toggleTheme() {
+    setState(() {
+      _currentThemeMode = _currentThemeMode == ThemeMode.light
+          ? ThemeMode.dark
+          : ThemeMode.light;
+    });
   }
 }

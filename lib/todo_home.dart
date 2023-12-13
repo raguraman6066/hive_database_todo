@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_database/add_todo.dart';
+import 'package:hive_database/main.dart';
 import 'package:hive_database/todo_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class TodoHome extends StatelessWidget {
-  TodoHome({Key? key}) : super(key: key);
+  TodoHome({Key? key, required this.toggleTheme}) : super(key: key);
   Box todoBox = Hive.box<Todo>('todo');
-
+  final VoidCallback toggleTheme;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Todo Hive')),
+      appBar: AppBar(
+        title: Text('Todo Hive'),
+        actions: [ElevatedButton(onPressed: toggleTheme, child: Text('Theme'))],
+      ),
       body: ValueListenableBuilder(
         valueListenable: todoBox.listenable(),
         //important Box box
